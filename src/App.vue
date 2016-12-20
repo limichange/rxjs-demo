@@ -1,22 +1,38 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <hello></hello>
+    <button ref="button" type="button" name="button">点击</button>
+    <p v-text="count"></p>
   </div>
 </template>
 
 <script>
-import Hello from './components/Hello'
+import Rx from 'rxjs'
 
 export default {
-  name: 'app',
-  components: {
-    Hello
+  data () {
+    return {
+      count: 0
+    }
+  },
+  mounted () {
+    const self = this
+
+    Rx.Observable.fromEvent(self.$refs.button, 'click')
+      .throttleTime(1000)
+      .scan(count => count + 1, self.count)
+      .subscribe((count) => {
+        self.count = count
+      })
   }
 }
 </script>
 
 <style>
+button {
+  width: 200px;
+  font-size: 28px;
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
