@@ -15,7 +15,17 @@ export default {
     }
   },
   mounted () {
+    console.clear()
     const self = this
+    const Observer = Rx.Observable.ajax('https://api.github.com')
+
+    Observer
+      .map(res => res.response.code_search_url)
+      .subscribe(console.log)
+
+    Observer
+      .map(res => res.response.issue_search_url)
+      .subscribe(console.log)
 
     Rx.Observable.fromEvent(self.$refs.button, 'click')
       .throttleTime(1000)
