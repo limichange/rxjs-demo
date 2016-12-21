@@ -17,6 +17,9 @@ export default {
   mounted () {
     console.clear()
     const self = this
+
+// =============================================================================
+
     const Observer = Rx.Observable.ajax('https://api.github.com')
 
     Observer
@@ -25,13 +28,19 @@ export default {
 
     Observer
       .map(res => res.response.issue_search_url)
-      .subscribe(console.log)
+      .subscribe({
+        next: console.log
+      })
+
+// =============================================================================
 
     Rx.Observable.fromEvent(self.$refs.button, 'click')
       .throttleTime(1000)
       .scan(count => count + 1, self.count)
-      .subscribe((count) => {
-        self.count = count
+      .subscribe({
+        next: (count) => {
+          self.count = count
+        }
       })
   }
 }
